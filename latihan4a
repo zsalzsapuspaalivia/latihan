@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Form Mahasiswa',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String _nama = '';
+  String _gender = '';
+  bool _sudahBekerja = false;
+  double _tinggiBadan = 160.0;
+  List<String> _makananFavorit = [];
+  String _pekerjaanOrtu = '';
+  String _provinsiAsal = '';
+
+  final List<String> _genderList = ['Laki-laki', 'Perempuan'];
+  final List<String> _makananFavoritList = ['Nasi Goreng', 'Pizza', 'Sushi', 'Burger'];
+  final List<String> _pekerjaanOrtuList = ['PNS', 'Wiraswasta', 'Pegawai Swasta'];
+  final List<String> _provinsiAsalList = ['Jawa Barat', 'Jawa Tengah', 'Jawa Timur'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Form Mahasiswa'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Nama'),
+                onChanged: (value) {
+                  setState(() {
+                    _nama = value;
+                  });
+                },
+              ),
+
+              SizedBox(height: 16.0),
+              Text('Gender'),
+              Column(
+                children: _genderList.map((gender) {
+                  return Row(
+                    children: [
+                      Radio(
+                        value: gender,
+                        groupValue: _gender,
+                        onChanged: (value) {
+                          setState(() {
+                            _gender = value.toString();
+                          });
+                        },
+                      ),
+                      Text(gender),
+                    ],
+                  );
+                }).toList(),
+              ),
+
+              SizedBox(height: 16.0),
+              Row(
+                children: [
+                  Text('Sudah Bekerja'),
+                  Switch(
+                    value: _sudahBekerja,
+                    onChanged: (value) {
+                      setState(() {
+                        _sudahBekerja = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 16.0),
+              Text('Tinggi Badan: $_tinggiBadan cm'),
+              Slider(
+                value: _tinggiBadan,
+                min: 100.0,
+                max: 200.0,
+                onChanged: (value) {
+                  setState(() {
+                    _tinggiBadan = value;
+                  });
+                },
+              ),
+
+              SizedBox(height: 16.0),
+              Text('Makanan Favorit'),
+              Column(
+                children: _makananFavoritList.map((makanan) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: _makananFavorit.contains(makanan),
+                        onChanged: (value) {
+                          setState(() {
+                            if (value != null) {
+                              if (value) {
+                                _makananFavorit.add(makanan);
+                              } else {
+                                _makananFavorit.remove(makanan);
+                              }
+                            }
+                          });
+                        },
+                      ),
+                      Text(makanan),
+                    ],
+                  );
+                }).toList(),
+              ),
+              
+              SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                value: _pekerjaanOrtu,
+                items: _pekerjaanOrtuList.map((pekerjaan) {
+                  return DropdownMenuItem<String>(
+                    value: pekerjaan,
+                    child: Text(pekerjaan),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _pekerjaanOrtu = value!;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Pekerjaan Orang Tua'),
+              ),
+              
+              SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                value: _provinsiAsal,
+                items: _provinsiAsalList.map((provinsi) {
+                  return DropdownMenuItem<String>(
+                    value: provinsi,
+                    child: Text(provinsi),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _provinsiAsal = value!;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Provinsi Asal'),
+              ),
+              
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Proses data yang telah dikumpulkan, misalnya menampilkan data atau mengirimnya ke server.
+                  print('Nama: $_nama');
+                  print('Gender: $_gender');
+                  print('Sudah Bekerja: $_sudahBekerja');
+                  print('Tinggi Badan: $_tinggiBadan');
+                  print('Makanan Favorit: $_makananFavorit');
+                  print('Pekerjaan Ortu: $_pekerjaanOrtu');
+                  print('Provinsi Asal: $_provinsiAsal');
+                },
+                child: Text('Simpan'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
